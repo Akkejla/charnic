@@ -26,7 +26,7 @@
  define('BEZ_DATABASE','cha6408987_users');
 
  //Префикс БД
- define('BEZ_DBPREFIX','cha6408987_');
+ define('BEZ_DBPREFIX','');
 
  //Errors
  define('BEZ_ERROR_CONNECT','Немогу соеденится с БД');
