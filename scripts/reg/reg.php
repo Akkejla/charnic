@@ -18,7 +18,7 @@
  {
 	//Проверяем ключ
 	$sql = 'SELECT * 
-			FROM `'. BEZ_DBPREFIX .'reg`
+			FROM `'. BEZ_DBPREFIX .'users`
 			WHERE `active_hex` = :key';
 	//Подготавливаем PDO выражение для SQL запроса
 	$stmt = $db->prepare($sql);
@@ -38,7 +38,7 @@
 		$email = $rows[0]['login'];
 	
 		//Активируем аккаунт пользователя
-		$sql = 'UPDATE `'. BEZ_DBPREFIX .'reg`
+		$sql = 'UPDATE `'. BEZ_DBPREFIX .'users`
 				SET `status` = 1
 				WHERE `login` = :email';
 		//Подготавливаем PDO выражение для SQL запроса
@@ -95,7 +95,7 @@
 			/*Проверяем существует ли у нас 
 			такой пользователь в БД*/
 			$sql = 'SELECT `login` 
-					FROM `'. BEZ_DBPREFIX .'reg`
+					FROM `'. BEZ_DBPREFIX .'users`
 					WHERE `login` = :login';
 			//Подготавливаем PDO выражение для SQL запроса
 			$stmt = $db->prepare($sql);
