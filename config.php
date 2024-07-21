@@ -38,5 +38,5 @@
  define('BEZ_HOST','http://'. $_SERVER['HTTP_HOST'] .'/');
  
  //Адрес почты от кого отправляем
- define('BEZ_MAIL_AUTOR','Регистрация на http://bezramok-tlt.ru <no-reply@bezramok-tlt.ru>');
+ define('BEZ_MAIL_AUTOR','Регистрация на http://charnic.ru <no-reply@bezramok-tlt.ru>');
  ?>

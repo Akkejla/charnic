@@ -118,7 +118,7 @@
 				$pass = md5(md5($_POST['pass']).$salt);
 				
 				/*Если все хорошо, пишем данные в базу*/
-				$sql = 'INSERT INTO '. BEZ_DBPREFIX .'reg
+				$sql = 'INSERT INTO '. BEZ_DBPREFIX .'users
 				       (login, pass, salt, active_hex, status)
 				       VALUES
 				       (:email, :pass, :salt, :active_hex, 0)';
