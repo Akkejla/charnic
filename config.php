@@ -23,10 +23,10 @@
  define('BEZ_DBPASSWORD','MZa2mmZ-');
 
  //БД
- define('BEZ_DATABASE','cha6408987_db');
+ define('BEZ_DATABASE','users');
 
  //Префикс БД
- define('BEZ_DBPREFIX','');
+ define('BEZ_DBPREFIX','cha6408987_');
 
  //Errors
  define('BEZ_ERROR_CONNECT','Немогу соеденится с БД');
