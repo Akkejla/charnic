@@ -23,7 +23,7 @@
  define('BEZ_DBPASSWORD','MZa2mmZ-');
 
  //БД
- define('BEZ_DATABASE','users');
+ define('BEZ_DATABASE','cha6408987_users');
 
  //Префикс БД
  define('BEZ_DBPREFIX','cha6408987_');
