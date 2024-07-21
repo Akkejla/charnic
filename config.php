@@ -14,19 +14,19 @@
  }
 
  //Адрес базы данных
- define('BEZ_DBSERVER','localhost');
+ define('BEZ_DBSERVER','cha6408987.mysql');
 
  //Логин БД
- define('BEZ_DBUSER','root');
+ define('BEZ_DBUSER','cha6408987_mysql');
 
  //Пароль БД
- define('BEZ_DBPASSWORD','root');
+ define('BEZ_DBPASSWORD','MZa2mmZ-');
 
  //БД
- define('BEZ_DATABASE','EPP');
+ define('BEZ_DATABASE','users');
 
  //Префикс БД
- define('BEZ_DBPREFIX','bez_');
+ define('BEZ_DBPREFIX','');
 
  //Errors
  define('BEZ_ERROR_CONNECT','Немогу соеденится с БД');
