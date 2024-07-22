@@ -14,23 +14,23 @@
 	echo '<b>Ваш аккаунт на http://bezramok-tlt.ru успешно активирован!</b>';
 	
  //Производим активацию аккаунта
- if(isset($_GET['key']))
- {
-	// Проверяем ключ
-	$sql = 'SELECT * 
-	    FROM ' . BEZ_DBPREFIX . USERS . '
-	    WHERE active_hex = :key';
-	// Подготавливаем PDO выражение для SQL запроса
-	$stmt = $db->prepare($sql);
-	$stmt->bindValue(':key', $_GET['key'], PDO::PARAM_STR);
-	$stmt->execute();
-	$rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+ if (isset($_GET['key'])) {
+    // Проверяем ключ
+    $sql = 'SELECT * 
+        FROM ' . BEZ_DBPREFIX . USERS . '
+        WHERE active_hex = :key';
+    // Подготавливаем PDO выражение для SQL запроса
+    $stmt = $db->prepare($sql);
+    $stmt->bindValue(':key', $_GET['key'], PDO::PARAM_STR);
+    $stmt->execute();
+    $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-	if (count($rows) == 0) {
-	    $err[] = 'Ключ активации не верен!';
-	}
+    if (count($rows) == 0) {
+        $err[] = 'Ключ активации не верен!';
+    }
 
-	// Проверяем наличие ошибок и выводим пользователю
+    // Проверяем наличие ошибок и выводим пользователю
+}
 
 	if(count($err) > 0)
 		echo showErrorMessage($err);
