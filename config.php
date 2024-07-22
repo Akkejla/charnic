@@ -28,7 +28,7 @@
  //Префикс БД
  define('BEZ_DBPREFIX','');
 
- /Таблица пользоаптелей
+ //Таблица пользоаптелей
  define('USERS','users');
 
  //Errors
