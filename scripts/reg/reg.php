@@ -30,7 +30,7 @@
     }
 
     // Проверяем наличие ошибок и выводим пользователю
-}
+
 
 	if(count($err) > 0)
 		echo showErrorMessage($err);
