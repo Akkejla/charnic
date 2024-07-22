@@ -37,7 +37,7 @@
 		/*Создаем запрос на выборку из базы 
 		данных для проверки подлиности пользователя*/
 		$sql = 'SELECT * 
-				FROM `'. BEZ_DBPREFIX .'reg`
+				FROM ' . BEZ_DBPREFIX . USERS . '
 				WHERE `login` = :email
 				AND `status` = 1';
 		//Подготавливаем PDO выражение для SQL запроса
