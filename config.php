@@ -28,6 +28,9 @@
  //Префикс БД
  define('BEZ_DBPREFIX','');
 
+ /Таблица пользоаптелей
+ define('USERS','users');
+
  //Errors
  define('BEZ_ERROR_CONNECT','Немогу соеденится с БД');
 
