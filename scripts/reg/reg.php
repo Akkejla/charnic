@@ -16,20 +16,22 @@
  //Производим активацию аккаунта
  if(isset($_GET['key']))
  {
-	//Проверяем ключ
+	// Проверяем ключ
 	$sql = 'SELECT * 
-			FROM `'. BEZ_DBPREFIX . USERS . '`
-			WHERE `active_hex` = :key';
-	//Подготавливаем PDO выражение для SQL запроса
+	    FROM ' . BEZ_DBPREFIX . USERS . '
+	    WHERE active_hex = :key';
+	// Подготавливаем PDO выражение для SQL запроса
 	$stmt = $db->prepare($sql);
 	$stmt->bindValue(':key', $_GET['key'], PDO::PARAM_STR);
 	$stmt->execute();
 	$rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-	if(count($rows) == 0)
-		$err[] = 'Ключ активации не верен!';
-	
-	//Проверяем наличие ошибок и выводим пользователю
+	if (count($rows) == 0) {
+	    $err[] = 'Ключ активации не верен!';
+	}
+
+	// Проверяем наличие ошибок и выводим пользователю
+
 	if(count($err) > 0)
 		echo showErrorMessage($err);
 	else
@@ -38,7 +40,7 @@
 		$email = $rows[0]['login'];
 	
 		//Активируем аккаунт пользователя
-		$sql = 'UPDATE `'. BEZ_DBPREFIX . USERS .'`
+		$sql = 'UPDATE ' . BEZ_DBPREFIX . USERS . '
 				SET `status` = 1
 				WHERE `login` = :email';
 		//Подготавливаем PDO выражение для SQL запроса
@@ -95,7 +97,7 @@
 			/*Проверяем существует ли у нас 
 			такой пользователь в БД*/
 			$sql = 'SELECT `login` 
-					FROM `'. BEZ_DBPREFIX . USERS .'`
+					FROM ' . BEZ_DBPREFIX . USERS . '
 					WHERE `login` = :login';
 			//Подготавливаем PDO выражение для SQL запроса
 			$stmt = $db->prepare($sql);
@@ -118,7 +120,7 @@
 				$pass = md5(md5($_POST['pass']).$salt);
 				
 				/*Если все хорошо, пишем данные в базу*/
-				$sql = 'INSERT INTO '. BEZ_DBPREFIX .'users
+				$sql = 'INSERT INTO '.  BEZ_DBPREFIX . USERS . '
 				       (login, pass, salt, active_hex, status)
 				       VALUES
 				       (:email, :pass, :salt, :active_hex, 0)';
