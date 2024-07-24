@@ -114,8 +114,11 @@ function toggleStyle() {
     if (isset($_GET['style']) && $_GET['style'] !== $current_style) {
         $_SESSION['style'] = $_GET['style'];
         // Перенаправляем пользователя на текущую страницу без параметра 'style'
-        header("Location: " . EPP_HOST);
-        exit;
+          $currentUrl = $_SERVER['REQUEST_URI'];
+          $currentUrl = strtok($currentUrl, '?');
+          header("Location: $currentUrl");
+          exit;
+        
     }
 
     return array(
