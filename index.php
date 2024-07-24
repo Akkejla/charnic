@@ -10,7 +10,7 @@
 
 	//Устанавливаем кодировку и вывод всех ошибок
 	header('Content-Type: text/html; charset=UTF8');
-	error_reporting(E_ALL);
+	// error_reporting(E_ALL);
 
 	//Включаем буферизацию содержимого
 	ob_start();
