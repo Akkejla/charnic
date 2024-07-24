@@ -16,6 +16,7 @@ $style_param = $result['style_param'];
 				<?php } ?>
 
 			</li>
+			<li><a href="<?php echo EPP_HOST; ?>?mode=reg">Регистрация</a></li>
 			<li><a href="<?php echo $style_link; ?>"><?php echo ucfirst($style_param); ?></a></li>
 		</ul>
 	</div>
