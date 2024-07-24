@@ -1,7 +1,6 @@
 <?php
  /**
  * Обработчик формы регистрации
- * Site: http://bezramok-tlt.ru
  * Регистрация пользователя письмом
  */
  
@@ -11,13 +10,13 @@
  
  //Выводим сообщение об удачной регистрации
  if(isset($_GET['active']) and $_GET['active'] == 'ok')
-	echo '<b>Ваш аккаунт на http://bezramok-tlt.ru успешно активирован!</b>';
+	echo '<b>Ваш аккаунт на http://charnic.ru успешно активирован!</b>';
 	
  //Производим активацию аккаунта
  if (isset($_GET['key'])) {
     // Проверяем ключ
     $sql = 'SELECT * 
-        FROM ' . BEZ_DBPREFIX . USERS . '
+        FROM ' . EPP_DBPREFIX . USERS . '
         WHERE active_hex = :key';
     // Подготавливаем PDO выражение для SQL запроса
     $stmt = $db->prepare($sql);
@@ -40,7 +39,7 @@
 		$email = $rows[0]['login'];
 	
 		//Активируем аккаунт пользователя
-		$sql = 'UPDATE ' . BEZ_DBPREFIX . USERS . '
+		$sql = 'UPDATE ' . EPP_DBPREFIX . USERS . '
 				SET `status` = 1
 				WHERE `login` = :email';
 		//Подготавливаем PDO выражение для SQL запроса
@@ -49,14 +48,14 @@
 		$stmt->execute();
 		
 		//Отправляем письмо для активации
-		$title = 'Ваш аккаунт на http://bezramok-tlt.ru успешно активирован';
-		$message = 'Поздравляю Вас, Ваш аккаунт на http://bezramok-tlt.ru успешно активирован';
+		$title = 'Ваш аккаунт на http://charnic.ru успешно активирован';
+		$message = 'Поздравляю Вас, Ваш аккаунт на http://charnic.ru успешно активирован';
 			
-		sendMessageMail($email, BEZ_MAIL_AUTOR, $title, $message);
+		sendMessageMail($email, EPP_MAIL_AUTOR, $title, $message);
 			
 		/*Перенаправляем пользователя на 
 		нужную нам страницу*/
-		header('Location:'. BEZ_HOST .'?mode=reg&active=ok');
+		header('Location:'. EPP_HOST .'?mode=reg&active=ok');
 		exit;
 	}
  }
@@ -97,7 +96,7 @@
 			/*Проверяем существует ли у нас 
 			такой пользователь в БД*/
 			$sql = 'SELECT `login` 
-					FROM ' . BEZ_DBPREFIX . USERS . '
+					FROM ' . EPP_DBPREFIX . USERS . '
 					WHERE `login` = :login';
 			//Подготавливаем PDO выражение для SQL запроса
 			$stmt = $db->prepare($sql);
@@ -120,7 +119,7 @@
 				$pass = md5(md5($_POST['pass']).$salt);
 				
 				/*Если все хорошо, пишем данные в базу*/
-				$sql = 'INSERT INTO '.  BEZ_DBPREFIX . USERS . '
+				$sql = 'INSERT INTO '.  EPP_DBPREFIX . USERS . '
 				       (login, pass, salt, active_hex, status)
 				       VALUES
 				       (:email, :pass, :salt, :active_hex, 0)';
@@ -133,15 +132,15 @@
 				$stmt->execute();
 				
 				//Отправляем письмо для активации
-				$url = BEZ_HOST .'?mode=reg&key='. md5($salt);
-				$title = 'Регистрация на http://bezramok-tlt.ru';
+				$url = EPP_HOST .'?mode=reg&key='. md5($salt);
+				$title = 'Регистрация на http://charnic.ru';
 				$message = 'Для активации Вашего акаунта пройдите по ссылке 
 				<a href="'. $url .'">'. $url .'</a>';
 				
-				sendMessageMail($_POST['email'], BEZ_MAIL_AUTOR, $title, $message);
+				sendMessageMail($_POST['email'], EPP_MAIL_AUTOR, $title, $message);
 				
 				//Сбрасываем параметры
-				header('Location:'. BEZ_HOST .'?mode=reg&status=ok');
+				header('Location:'. EPP_HOST .'?mode=reg&status=ok');
 				exit;
 			}
 		}

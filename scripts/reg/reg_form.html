@@ -1,23 +1,23 @@
-<h2>Регистрация пользователей PHP MySQL с активацией письмом</h2>
+<h2>Форма регистрации</h2>
 	<form action="" method="POST">
-		<table>
-			<tr>
-				<td>E-mail<font color="red">*</font>:</td>
-				<td><input type="text" size="30" name="email"></td>
-			</tr>
-			<tr>
-				<td>Пароль<font color="red">*</font>:</td>
-				<td><input type="password" size="30" maxlength="20" name="pass"></td>
-			</tr>
-			<tr>
-				<td>Подтверждения пароля<font color="red">*</font>:</td>
-				<td><input type="password" size="30" maxlength="20" name="pass2"></td>
-			</tr>
-			<tr>
-				<td>&nbsp;</td>
-				<td colspan="2"><input type="submit" value="Зарегистроваться" name="submit"></td>
-			</tr>
-		</table>
+		<div class="registration-cssave">
+		    <form>
+	        	<div class="form-group">
+		            <input class="form-control item" type="email" name="email" id="email" placeholder="Email" required>
+		        </div>
+		        <div class="form-group">
+		            <input class="form-control item" type="password" name="pass" minlength="3" id="password" placeholder="Пароль" required>
+		        </div>
+		        <div class="form-group">
+		            <input class="form-control item" type="password" name="pass2" minlength="3" id="password" placeholder="Подтверждение пароля" required>
+		        </div>
+		
+		        <div class="form-group">
+		            <button class="btn btn-primary btn-block create-account" type="submit" name="submit">Регистрация</button>
+		        </div>
+		    </form>
+		</div>
 	</form>
-<br>Поля со значком <font color="red">*</font> обязательны для заполнения
-<p><strong>Внимание!</strong> Для полноценной проверки системы регистрации Вам нужно указать действующий <strong>e-mail</strong> т.к. на него будет выслано письмо с кодом активации!</p>
+
+
+	

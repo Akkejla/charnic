@@ -1,7 +1,7 @@
 <?php
 	/**
 	* Главный файл (переключатель)
-	* Site: http://bezramok-tlt.ru
+	* Site: http://charnic.ru
 	* Регистрация пользователя письмом
 	*/
 
@@ -20,18 +20,29 @@
 	$user = isset($_SESSION['user']) ? $_SESSION['user'] : false;
 	$err = array();
 
+
 	//Устанавливаем ключ защиты
-	define('BEZ_KEY', true);
-	 
+	define('EPP_KEY', true);
+	
+
+
 	//Подключаем конфигурационный файл
-	include './config.php';
-	 
+	if($_SERVER['HTTP_HOST'] == 'charnic'){
+		include './config_local.php';
+	}else {
+		include './config_online.php';
+	}
 	//Подключаем скрипт с функциями
 	include './func/funct.php';
 
 	//подключаем MySQL
 	include './bd/bd.php';
 
+
+	// Получаем данные Юзера
+	if (isset ($_SESSION['login'])){
+		$userData = getUserData($_SESSION['login']);
+	}
 	switch($mode)
 	{
 		//Подключаем обработчик с формой регистрации
@@ -49,10 +60,14 @@
     
 	}
     
+   
 	//Получаем данные с буфера
 	$content = ob_get_contents();
 	ob_end_clean();
 
 	//Подключаем наш шаблон
-	include './html/index.html';
+	include './page/head.php';
+	include './page/body.php';
+	include './page/footer.php';
+
 ?>			

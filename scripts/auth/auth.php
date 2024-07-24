@@ -1,7 +1,7 @@
 <?php
  /**
  * Обработчик формы авторизации
- * Site: http://bezramok-tlt.ru
+ * Site: http://charnic.ru
  * Авторизация пользователя
  */
  
@@ -11,7 +11,7 @@
  	session_destroy();
 
  	//Делаем редирект
- 	header('Location:'. BEZ_HOST .'?mode=auth');
+ 	header('Location:'. EPP_HOST .'?mode=auth');
  	exit;
  }
 
@@ -37,7 +37,7 @@
 		/*Создаем запрос на выборку из базы 
 		данных для проверки подлиности пользователя*/
 		$sql = 'SELECT * 
-				FROM ' . BEZ_DBPREFIX . USERS . '
+				FROM ' . EPP_DBPREFIX . USERS . '
 				WHERE `login` = :email
 				AND `status` = 1';
 		//Подготавливаем PDO выражение для SQL запроса
@@ -55,16 +55,23 @@
 			if(md5(md5($_POST['pass']).$rows[0]['salt']) == $rows[0]['pass'])
 			{	
 				$_SESSION['user'] = true;
+				$_SESSION['login'] = $rows[0]['login'];; 
+
 				
+
 				//Сбрасываем параметры
-				header('Location:'. BEZ_HOST .'?mode=auth');
+				header('Location:'. EPP_HOST .'?mode=auth');
 				exit;
 			}
-			else
-				echo showErrorMessage('Неверный пароль!');
-		}else{
-			echo showErrorMessage('Логин <b>'. $_POST['email'] .'</b> не найден!');
-		}
+			else{
+				$err[] = 'Неверный пароль!';
+                echo showErrorMessage($err);
+            }
+        }
+        else{
+            $err[] = 'Логин <b>'. $_POST['email'] .'</b> не найден!';
+            echo showErrorMessage($err);
+        }
 	}
  }
  

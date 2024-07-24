@@ -1,7 +1,7 @@
  <?php
  /**
  * Файл с пользовательскими функциями
- * Site: http://bezramok-tlt.ru
+ * Site: http://charnic.ru
  * Регистрация пользователя письмом
  */
  
@@ -36,19 +36,23 @@
   */
  function showErrorMessage($data)
  {
-    $err = '<ul>'."\n";	
+   $err = '';	
 	
 	if(is_array($data))
 	{
 		foreach($data as $val)
-			$err .= '<li style="color:red;">'. $val .'</li>'."\n";
+			$err .= '<span style="color:red;">'. $val .'</span>'."\n";
 	}
 	else
-		$err .= '<li style="color:red;">'. $data .'</li>'."\n";
+		$err .= '<span style="color:red;">'. $data .'</span>'."\n";
     
-	$err .= '</ul>'."\n";
-    
-    return $err;
+	
+
+  
+  $_SESSION['error_message'] = '<div class="error-message">' . $err . '</div>';
+
+    // Возвращаем пустую строку, так как ошибка будет выведена в футере
+    return '';
  }
  
 
@@ -80,4 +84,83 @@
     }
   }      
  }
+ // функция переключения стиля
+function toggleStyle() {
+    // Получаем текущий стиль из сессии
+    $current_style = isset($_SESSION['style']) ? $_SESSION['style'] : 'light';
+
+    // Определяем URL-параметр для смены стиля
+    $style_param = ($current_style == 'dark') ? 'light' : 'dark';
+
+    // Формируем ссылку для смены стиля
+    $style_link = EPP_HOST . '?style=' . $style_param;
+
+    // Проверяем, содержит ли текущий URL параметры
+    $query_string = strpos($_SERVER['REQUEST_URI'], '?');
+    if ($query_string !== false) {
+        // Получаем текущие параметры из URL
+        $current_params = explode('?', $_SERVER['REQUEST_URI'])[1];
+        $params = array();
+        parse_str($current_params, $params);
+
+        // Обновляем значение параметра 'style'
+        $params['style'] = $style_param;
+
+        // Формируем новый URL с обновленным параметром 'style'
+        $style_link = EPP_HOST . '?' . http_build_query($params);
+    }
+
+    // Если присутствует параметр 'style' в запросе, обновляем значение в сессии
+    if (isset($_GET['style']) && $_GET['style'] !== $current_style) {
+        $_SESSION['style'] = $_GET['style'];
+        // Перенаправляем пользователя на текущую страницу без параметра 'style'
+        header("Location: " . EPP_HOST);
+        exit;
+    }
+
+    return array(
+        'style_link' => $style_link,
+        'style_param' => $style_param
+    );
+  }
+
+  // Зона для авторизованного и не авторизованного пользователя
+  function loadZoneFile($user)
+  {
+      if ($user === false) {
+          include './page/unauth_zone/unauth_zone.php';
+      } else {
+         include './page/auth_zone/auth_zone.php';
+      }
+  }
+
+// Данные авторизованного пользователя
+  
+function getUserData($login)
+{
+    global $db; // Используем глобальный объект $db
+
+    /*Проверяем существует ли у нас 
+    такой пользователь в БД*/
+    $sql = 'SELECT * 
+           FROM ' . EPP_DBPREFIX . USERS . '
+           WHERE login = :login';
+           
+    //Подготавливаем PDO выражение для SQL запроса
+    $stmt = $db->prepare($sql);
+    $stmt->bindValue(':login', $login, PDO::PARAM_STR);
+    $stmt->execute();
+
+    //Получаем данные SQL запроса
+    $user = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    if ($user) {
+        // Возвращаем данные пользователя
+        return $user;
+    } else {
+        // Возвращаем ошибку
+        return false;
+    }
+}
+
  ?>

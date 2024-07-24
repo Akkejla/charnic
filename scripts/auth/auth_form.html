@@ -1,17 +1,15 @@
-<h2>Введите свой Логин и Пароль для входа!</h2>
-	<form action="" method="POST">
-		<table>
-			<tr>
-				<td>E-mail:</td>
-				<td><input type="text" size="30" name="email"></td>
-			</tr>
-			<tr>
-				<td>Пароль:</td>
-				<td><input type="password" size="30" maxlength="20" name="pass"></td>
-			</tr>
-			<tr>
-				<td>&nbsp;</td>
-				<td colspan="2"><input type="submit" value="Войти" name="submit"></td>
-			</tr>
-		</table>
-	</form>
+<form action="" method="POST">
+	<div class="registration-cssave">
+	    <form>
+        	<div class="form-group">
+	            <input class="form-control item" type="email" name="email" id="email" placeholder="Email" required>
+	        </div>
+	        <div class="form-group">
+	            <input class="form-control item" type="password" name="pass" minlength="3" id="password" placeholder="Пароль" required>
+	        </div>
+	        <div class="form-group">
+	            <button class="btn btn-primary btn-block create-account" type="submit" name="submit">Авторизация</button>
+	        </div>
+	    </form>
+	</div>
+</form>
