@@ -8,7 +8,15 @@
 			</div>
 		</div>
 		<div class="wrap messages">
-		    Здравствуйте, <?= isset($userData['login']) ? $userData['login'] : 'Гость! Авторизируйтесь или зарегестрируйтесь и авторизируйтесь пожалуйста'; ?>
+				<?php
+					$_SESSION['message'] = 'Здравствуйте, ' . (isset($userData['login']) ? $userData['login'] : 'Гость! Авторизируйтесь или зарегестрируйтесь и авторизируйтесь пожалуйста');
+					// Удаляем сообщение из сессии, чтобы она не выводилась снова
+					if (isset($_SESSION['message'])){
+						echo $_SESSION['message'];
+		            	unset($_SESSION['message']);
+		            }
+				?>
+
 		</div>
 		<div class="wrap errors">
 			 <?php

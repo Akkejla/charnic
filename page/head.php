@@ -16,4 +16,7 @@
 	    		echo '<link href="./css/dark.css" rel="stylesheet" type="text/css">';
 			}
 		?>
+
+		<!-- скрипты -->
+		 <!-- <script src="js/functions.js"></script> -->
 	</head>

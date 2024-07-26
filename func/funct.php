@@ -11,26 +11,163 @@
  * @param string  $title
  * @param string  $message
  */
- function sendMessageMail($to, $from, $title, $message)
- {
-   
-   //Формируем заголовок письма
-   $subject = $title;
-   $subject = '=?utf-8?b?'. base64_encode($subject) .'?=';
-   
-   //Формируем заголовки для почтового сервера
-   $headers  = "Content-type: text/html; charset=\"utf-8\"\r\n";
-   $headers .= "From: ". $from ."\r\n";
-   $headers .= "MIME-Version: 1.0\r\n";
-   $headers .= "Date: ". date('D, d M Y h:i:s O') ."\r\n";
+function sendMessageMail($to, $from, $title, $message)
+{
+    //Формируем заголовок письма
+    $subject = $title;
+    $subject = '=?utf-8?b?'. base64_encode($subject) .'?=';
 
-   //Отправляем данные на ящик админа сайта
-   if(!mail($to, $subject, $message, $headers))
-      return 'Ошибка отправки письма!';  
-   else  
-      return true;  
- }
- 
+    //Формируем заголовки для почтового сервера
+    $headers  = "Content-type: text/html; charset=\"utf-8\"\r\n";
+    $headers .= "From: ". $from ."\r\n";
+    $headers .= "MIME-Version: 1.0\r\n";
+    $headers .= "Date: ". date('D, d M Y h:i:s O') ."\r\n";
+
+    //Отправляем данные на ящик админа сайта
+    if(!mail($to, $subject, $message, $headers))
+        return 'Ошибка отправки письма!';
+    else
+        return true;
+}
+ function activateAccount($key) {
+   global $db;
+    // Проверяем ключ
+    $sql = 'SELECT * 
+        FROM ' . EPP_DBPREFIX . USERS . '
+        WHERE active_hex = :key';
+    $stmt = $db->prepare($sql);
+    $stmt->bindValue(':key', $key, PDO::PARAM_STR);
+    $stmt->execute();
+    $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    if (count($rows) == 0) {
+        return 'Ключ активации не верен!';
+    }
+
+    // Получаем адрес пользователя
+    $email = $rows[0]['login'];
+
+    // Активируем аккаунт пользователя
+    $sql = 'UPDATE ' . EPP_DBPREFIX . USERS . '
+        SET status = 1
+        WHERE login = :email';
+    $stmt = $db->prepare($sql);
+    $stmt->bindValue(':email', $email, PDO::PARAM_STR);
+    $stmt->execute();
+
+    // Отправляем письмо для активации
+    $title = 'Ваш аккаунт на http://charnic.ru успешно активирован';
+    $message = 'Поздравляю Вас, Ваш аккаунт на http://charnic.ru успешно активирован';
+    sendMessageMail($email, EPP_MAIL_AUTOR, $title, $message);
+
+    // Перенаправляем пользователя
+    $_SESSION['message'] = '<b>Вы успешно активировали аккаунт! ';
+    header('Location:'. EPP_HOST .'?mode=reg&active=ok');
+    exit;
+}
+
+function validateRegistrationData($email, $pass, $pass2)
+{
+    $err = [];
+
+    // Проверка поля email
+    if (empty($email)) {
+        $err[] = 'Поле Email не может быть пустым!';
+    } else {
+        if (emailValid($email) === false) {
+            $err[] = 'Не правильно введен E-mail' . "\n";
+        }
+    }
+
+    // Проверка поля пароля
+    if (empty($pass)) {
+        $err[] = 'Поле Пароль не может быть пустым';
+    }
+
+    // Проверка поля подтверждения пароля
+    if (empty($pass2)) {
+        $err[] = 'Поле Подтверждения пароля не может быть пустым';
+    }
+
+    // Проверка совпадения паролей
+    if ($pass !== $pass2) {
+        $err[] = 'Пароли не совпадают';
+    }
+
+    if (count($err) > 0) {
+        return $err;
+    } else {
+        return true;
+    }
+}
+
+function checkUserExists($login)
+{
+    global $db;
+
+    $sql = 'SELECT login 
+            FROM ' . EPP_DBPREFIX . USERS . ' 
+            WHERE login = :login';
+
+    $stmt = $db->prepare($sql);
+    $stmt->bindParam(':login', $login, PDO::PARAM_STR);
+    $stmt->execute();
+    $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    if (count($result) == 0) {
+        return true;
+    } else {
+        $_SESSION['error_message'] = 'К сожалению Логин: <b>' . $login . '</b> занят!';
+        return false;
+    }
+}
+
+
+
+function registerUser($email, $pass)
+{
+    global $db, $_SESSION;
+    
+    // Получаем ХЕША соли
+    $salt = salt();
+
+    // Солим пароль
+    $password = md5(md5($pass) . $salt);
+    $active_hex = md5($salt);
+
+    // Формируем SQL-запрос для вставки пользователя в базу данных
+    $sql = 'INSERT INTO ' . EPP_DBPREFIX . USERS . '
+           (login, pass, salt, active_hex, status)
+           VALUES
+           (:email, :password, :salt, :active_hex, 0)';
+
+    $stmt = $db->prepare($sql);
+    $stmt->bindValue(':email', $email, PDO::PARAM_STR);
+    $stmt->bindValue(':password', $password, PDO::PARAM_STR);
+    $stmt->bindValue(':salt', $salt, PDO::PARAM_STR);
+    $stmt->bindValue(':active_hex', $active_hex, PDO::PARAM_STR);
+
+    // Выполняем SQL-запрос
+    if ($stmt->execute()) {
+        // Отправляем письмо для активации
+        $url = EPP_HOST . '?mode=reg&key=' . $active_hex;
+        $title = 'Регистрация на http://charnic.ru';
+        $message = 'Для активации Вашего акаунта пройдите по ссылке 
+        <a href="' . $url . '">' . $url . '</a>';
+
+        if (sendMessageMail($email, EPP_MAIL_AUTOR, $title, $message)) {
+            // Сбрасываем параметры
+            header('Location:' . EPP_HOST . '?mode=reg&status=ok');
+            exit;
+        } else {
+            showErrorMessage('Ошибка отправки письма!');
+        }
+        return true;
+    } else {
+        return $stmt->errorInfo(); // Возвращаем информацию об ошибке
+    }
+}
+
   /**функция вывода ошибок
   * @param array  $data
   */
@@ -44,11 +181,7 @@
 			$err .= '<span style="color:red;">'. $val .'</span>'."\n";
 	}
 	else
-		$err .= '<span style="color:red;">'. $data .'</span>'."\n";
-    
-	
-
-  
+		$err .= '<span style="color:red;">'. $data .'</span>'."\n";  
   $_SESSION['error_message'] = '<div class="error-message">' . $err . '</div>';
 
     // Возвращаем пустую строку, так как ошибка будет выведена в футере

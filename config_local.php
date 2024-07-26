@@ -29,6 +29,7 @@
 
  //Таблица пользоаптелей
  define('USERS','users');
+ 
 
  //Errors
  define('EPP_ERROR_CONNECT','Не могу соеденится с БД');
