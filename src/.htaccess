@@ -1,0 +1,7 @@
+# Включаем mod_rewrite
+RewriteEngine On
+
+# Переадресуем все запросы на index.js
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME}\.js -f
+RewriteRule ^(.*)$ index.js [L]
