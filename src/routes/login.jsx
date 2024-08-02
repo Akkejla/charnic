@@ -30,7 +30,11 @@ export default function Login() {
       navigate("/user");
     } catch (error) {
       console.error(error.message);
-      setError(error.message);
+          if (error.code === 'auth/invalid-credential') {
+        setError('Неверный логин или пароль!');
+      } else {
+        setError(error.message);
+      }
     }
     console.log("Logging in...");
   }

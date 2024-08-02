@@ -15,33 +15,36 @@ export default function Register() {
 
 
 
-  const onSubmit = async (event) => {
-    event.preventDefault();
+const onSubmit = async (event) => {
+  event.preventDefault();
 
-    // validate the inputs
-    if (!email || !password || !repeatPassword) {
-      setError("Пожалуйста, заполните все поля");
-      return;
-    }
-    if (password !== repeatPassword) {
-      setError("Пароли не совпадают");
-      return;
-    }
-
-    // clear the errors
-    setError("");
-
-    try {
-      let registerResponse = await createUser(email, password);
-      startSession(registerResponse.user);
-      navigate("/user");
-    } catch (error) {
-      console.error(error.message);
-      setError(error.message);
-    }
-    console.log("Registering...");
+  // validate the inputs
+  if (!email || !password || !repeatPassword) {
+    setError("Пожалуйста, заполните все поля");
+    return;
+  }
+  if (password !== repeatPassword) {
+    setError("Пароли не совпадают");
+    return;
   }
 
+  // clear the errors
+  setError("");
+
+  try {
+    let registerResponse = await createUser(email, password);
+    startSession(registerResponse.user);
+    navigate("/user");
+  } catch (error) {
+    console.error(error.message);
+    if (error.code === 'auth/email-already-in-use') {
+      setError('Этот email уже используется. Пожалуйста, используйте другой email.');
+    } else {
+      setError(error.message);
+    }
+  }
+  console.log("Registering...");
+};
   return (
     <Container maxWidth="xs" sx={{mt: 2}}>
       <Typography variant="h5" component="h1" gutterBottom textAlign="center">
