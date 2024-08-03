@@ -3,6 +3,7 @@ import {useNavigate} from "react-router-dom";
 import {useState} from "react";
 import {signInUser} from "../firebase";
 import {startSession} from "../session";
+import { handleFirebaseAuthError } from '../functions/firebaseAuthErrorHandler';
 
 export default function Login() {
 
@@ -30,11 +31,7 @@ export default function Login() {
       navigate("/user");
     } catch (error) {
       console.error(error.message);
-          if (error.code === 'auth/invalid-credential') {
-        setError('Неверный логин или пароль!');
-      } else {
-        setError(error.message);
-      }
+      setError(handleFirebaseAuthError(error));
     }
     console.log("Logging in...");
   }
